@@ -1,0 +1,399 @@
+
+
+<html lang="en">
+  <header id="cabeza">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <h2 id="titulo">
+      ProyectoDrawFlow <i id="img" class="fa-solid fa-diagram-predecessor"></i>
+    </h2>
+  </header>
+  <body id="body">
+    <div id="app"></div>
+    <script type="module" src="src/main.js"></script>
+    <script src="src/main.js"></script>
+    <script> src="main.go" </script>
+    <script src="https://cdn.jsdelivr.net/gh/jerosoler/Drawflow/dist/drawflow.min.js"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/gh/jerosoler/Drawflow/dist/drawflow.min.css"
+    />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="https://jerosoler.github.io/Drawflow/beautiful.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css"
+      integrity="sha256-h20CPZ0QyXlBuAw7A+KluUYx/3pK+c7lYEpqLTlxjYQ="
+      crossorigin="anonymous"
+    />
+    <script
+      src="https://kit.fontawesome.com/005e44bf91.js"
+      crossorigin="anonymous"
+    ></script>
+    <div class="wrapper">
+      <div id="col1" class="col">
+        <div
+          id="drag-drawflow"
+          draggable="true"
+          ondragstart="drag(event)"
+          data-node="Oper"
+        >
+          <i class="fa-solid fa-greater-than-equal"></i><span> Logica</span>
+        </div>
+        <div
+          id="drag-drawflow"
+          draggable="true"
+          ondragstart="drag(event)"
+          data-node="template"
+        >
+          <i class="fa-solid fa-font"></i><span> Cadena texto</span>
+        </div>
+        <div
+          id="drag-drawflow"
+          draggable="true"
+          ondragstart="drag(event)"
+          data-node="Math"
+        >
+          <i class="fa-solid fa-calculator"></i><span> Matematica</span>
+        </div>
+        <div
+          id="drag-drawflow"
+          draggable="true"
+          ondragstart="drag(event)"
+          data-node="valor"
+        >
+          <i class="fa-solid fa-arrow-down-1-9"></i><span> Valor</span>
+        </div>
+      </div>
+      <div id="colR" class="col-right">
+        <p id = "bienvenida">
+          Bienvenido al modulo de aprendizaje de programacion, para comenzar,
+          empieza<br />
+          agarrando alguno de los componentes en la columna de la izquierda y
+          posalo<br />
+          sobre el espacio de trabajo
+        </p>
+          <button id="boton" type="submit">
+          Ejecutar
+        </button>
+
+        <div
+          id="drawflow"
+          ondrop="drop(event)"
+          ondragover="allowDrop(event)"
+        ></div>
+      </div>
+    </div>
+    <script>
+      function obtenerdatos() {
+        var id = document.getElementById("drawflow");
+        document.main.go
+      }
+    </script>
+    <script name="nodos">
+      var id = document.getElementById("drawflow");
+      const editor = new Drawflow(id);
+      editor.reroute = true;
+      editor.drawflow = {
+        drawflow: {
+          Home: {
+            data: {},
+          },
+        },
+      };
+      editor.start();
+      editor.drawflow;
+      // Events!
+      editor.on("nodeCreated", function (id) {
+        console.log("Node created " + id);
+      });
+
+      editor.on("nodeRemoved", function (id) {
+        console.log("Node removed " + id);
+      });
+
+      editor.on("nodeSelected", function (id) {
+        console.log("Node selected " + id);
+      });
+
+      editor.on("moduleCreated", function (name) {
+        console.log("Module Created " + name);
+      });
+
+      editor.on("moduleChanged", function (name) {
+        console.log("Module Changed " + name);
+      });
+
+      editor.on("connectionCreated", function (connection) {
+        console.log("Connection created");
+        console.log(connection);
+      });
+
+      editor.on("connectionRemoved", function (connection) {
+        console.log("Connection removed");
+        console.log(connection);
+      });
+
+      editor.on("mouseMove", function (position) {
+        console.log("Position mouse x:" + position.x + " y:" + position.y);
+      });
+
+      editor.on("nodeMoved", function (id) {
+        console.log("Node moved " + id);
+      });
+
+      editor.on("zoom", function (zoom) {
+        console.log("Zoom level " + zoom);
+      });
+
+      editor.on("translate", function (position) {
+        console.log("Translate x:" + position.x + " y:" + position.y);
+      });
+
+      editor.on("addReroute", function (id) {
+        console.log("Reroute added " + id);
+      });
+
+      editor.on("removeReroute", function (id) {
+        console.log("Reroute removed " + id);
+      });
+
+      /* DRAG EVENT */
+
+      /* Mouse and Touch Actions */
+
+      var elements = document.getElementsByClassName("drag-drawflow");
+      for (var i = 0; i < elements.length; i++) {
+        elements[i].addEventListener("touchend", drop, false);
+        elements[i].addEventListener("touchmove", positionMobile, false);
+        elements[i].addEventListener("touchstart", drag, false);
+        console.log(editor.length);
+      }
+
+      var mobile_item_selec = "";
+      var mobile_last_move = null;
+      function positionMobile(ev) {
+        mobile_last_move = ev;
+      }
+
+      function allowDrop(ev) {
+        ev.preventDefault();
+      }
+
+      function drag(ev) {
+        if (ev.type === "touchstart") {
+          mobile_item_selec = ev.target
+            .closest(".drag-drawflow")
+            .getAttribute("data-node");
+        } else {
+          ev.dataTransfer.setData("node", ev.target.getAttribute("data-node"));
+        }
+      }
+
+      function drop(ev) {
+        if (ev.type === "touchend") {
+          var parentdrawflow = document
+            .elementFromPoint(
+              mobile_last_move.touches[0].clientX,
+              mobile_last_move.touches[0].clientY
+            )
+            .closest("#drawflow");
+          if (parentdrawflow != null) {
+            addNodeToDrawFlow(
+              mobile_item_selec,
+              mobile_last_move.touches[0].clientX,
+              mobile_last_move.touches[0].clientY
+            );
+          }
+          mobile_item_selec = "";
+        } else {
+          ev.preventDefault();
+          var data = ev.dataTransfer.getData("node");
+          addNodeToDrawFlow(data, ev.clientX, ev.clientY);
+        }
+        console.log(elements[0].TEXT_NODE);
+      }
+
+      function addNodeToDrawFlow(name, pos_x, pos_y) {
+        if (editor.editor_mode === "fixed") {
+          return false;
+        }
+        pos_x =
+          pos_x *
+            (editor.precanvas.clientWidth /
+              (editor.precanvas.clientWidth * editor.zoom)) -
+          editor.precanvas.getBoundingClientRect().x *
+            (editor.precanvas.clientWidth /
+              (editor.precanvas.clientWidth * editor.zoom));
+        pos_y =
+          pos_y *
+            (editor.precanvas.clientHeight /
+              (editor.precanvas.clientHeight * editor.zoom)) -
+          editor.precanvas.getBoundingClientRect().y *
+            (editor.precanvas.clientHeight /
+              (editor.precanvas.clientHeight * editor.zoom));
+
+        switch (name) {
+          case "slack":
+            var slackchat = `
+          <div>
+            <div class="title-box"><i class="fab fa-slack"></i> Slack chat message</div>
+          </div>
+          `;
+            editor.addNode("slack", 1, 0, pos_x, pos_y, "slack", {}, slackchat);
+            break;
+          case "valor":
+            var valortemplate = `
+          <div>
+            <div class="title-box"><i class="fa-solid fa-arrow-down-1-9"></i> Asignar Valor</div>
+            <div class="box">
+              <p>Ingrese un valor numerico</p>
+            <input type="number" df-name>
+            </div>
+          </div>
+          `;
+            editor.addNode(
+              "valor",
+              0,
+              1,
+              pos_x,
+              pos_y,
+              "github",
+              { name: "" },
+              valortemplate
+            );
+            break;
+          case "Oper":
+            var telegrambot = `
+          <div>
+            <div id="Operador" class="title-box"><i class="fa-solid fa-greater-than-equal"></i> Operaciones Logicas</div>
+            <div  class="box">
+              <p>Elija una de las opciones dentro del spinner</p>
+              <select df-channel>
+                <option value="channel_1"><=</option>
+                <option value="channel_2">>=</option>
+								<option value="channel_3">=</option>
+								<option value="channel_4">!=</option>
+              </select>
+            </div>
+          </div>
+          `;
+            editor.addNode(
+              "telegram",
+              2,
+              1,
+              pos_x,
+              pos_y,
+              "telegram",
+              { channel: "channel_3" },
+              telegrambot
+            );
+            break;
+          case "Math":
+            var Math = `
+          <div>
+            <div id="Mate" class="title-box"><i class="fa-solid fa-calculator"></i> 						Matematicas
+						</div>
+            <div  class="box">
+              <p>Elija una de las opciones dentro del spinner</p>
+              <select df-channel>
+                <option value="channel_1">/</option>
+                <option value="channel_2">*</option>
+								<option value="channel_3">+</option>
+								<option value="channel_4">-</option>
+              </select>
+							<p>Resultado: 
+								<output id="Resultado" >
+								</output>
+							</p>
+            </div>
+          </div>
+          `;
+            editor.addNode(
+              "Math",
+              2,
+              0,
+              pos_x,
+              pos_y,
+              "Math",
+              { channel: "channel_3" },
+              Math
+            );
+            break;
+          case "template":
+            var template = `
+            <div>
+              <div class="title-box"><i class="fa-solid fa-font"></i> Texto</div>
+              <div class="box">
+                Ingrese el texto requerido
+                <textarea df-template></textarea>
+              </div>
+            </div>
+            `;
+            editor.addNode(
+              "template",
+              0,
+              1,
+              pos_x,
+              pos_y,
+              "template",
+              { template: "Espacio de escritura" },
+              template
+            );
+            break;
+          case "dbclick":
+            var dbclick = `
+            <div>
+            <div class="title-box"><i class="fas fa-mouse"></i> Db Click</div>
+              <div class="box dbclickbox" ondblclick="showpopup(event)">
+                Db Click here
+                <div class="modal" style="display:none">
+                  <div class="modal-content">
+                    <span class="close" onclick="closemodal(event)">&times;</span>
+                    Change your variable {name} !
+                    <input type="text" df-name>
+                  </div>
+                </div>
+              </div>
+            </div>
+            `;
+            editor.addNode(
+              "dbclick",
+              1,
+              1,
+              pos_x,
+              pos_y,
+              "dbclick",
+              { name: "" },
+              dbclick
+            );
+            break;
+
+          default:
+        }
+      }
+
+      var transform = "";
+      function showpopup(e) {
+        e.target.closest(".drawflow-node").style.zIndex = "9999";
+        e.target.children[0].style.display = "block";
+        //document.getElementById("modalfix").style.display = "block";
+
+        //e.target.children[0].style.transform = 'translate('+translate.x+'px, '+translate.y+'px)';
+        transform = editor.precanvas.style.transform;
+        editor.precanvas.style.transform = "";
+        editor.precanvas.style.left = editor.canvas_x + "px";
+        editor.precanvas.style.top = editor.canvas_y + "px";
+        console.log(transform);
+
+        //e.target.children[0].style.top  =  -editor.canvas_y - editor.container.offsetTop +'px';
+        //e.target.children[0].style.left  =  -editor.canvas_x  - editor.container.offsetLeft +'px';
+        editor.editor_mode = "fixed";
+      }
+    </script>
+  </body>
+</html>
+
